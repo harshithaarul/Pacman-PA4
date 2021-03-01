@@ -260,11 +260,11 @@ class HybridAgent(CaptureAgent):
 
 
 def createTeam(firstIndex, secondIndex, isRed,
-               first='pacai.student.myTeam.HybridAgent',
-               second='pacai.student.myTeam.DefenseAgent'):
+               first= HybridAgent,
+               second= DefenseAgent):
 
-    firstAgent = reflection.qualifiedImport(first)
-    secondAgent = reflection.qualifiedImport(second)
+    firstAgent = first
+    secondAgent = second
 
     return [
         firstAgent(firstIndex),
