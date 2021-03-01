@@ -1,5 +1,3 @@
-
-from pacai.util import reflection
 import random
 from pacai.agents.capture.capture import CaptureAgent
 from pacai.core import distance
@@ -12,8 +10,6 @@ class DefenseAgent(CaptureAgent):
         super().__init__(index)
 
     def registerInitialState(self, gameState):
-
-
         super().registerInitialState(gameState)
         self.isRed = gameState.isOnRedTeam(self.index)
         # Your initialization code goes here, if you need any.
@@ -83,14 +79,13 @@ class DefenseAgent(CaptureAgent):
         else:
             return gameState.isOnRedSide(position)
 
-
     def evaluationFunction(self, currentGameState, action):
 
         successorGameState = currentGameState.generateSuccessor(self.index, action)
 
         # Useful information you can extract.
         newPosition = successorGameState.getAgentPosition(self.index)
-        oldFood = self.getOppFood(currentGameState)
+        # oldFood = self.getOppFood(currentGameState)
         oldOppPacmanPositions = self.getOppPacman(currentGameState)
         # newScaredTimes = [ghostState.getScaredTimer() for ghostState in newGhostStates]
 
@@ -199,8 +194,8 @@ class HybridAgent(CaptureAgent):
 
     def evaluationFunction(self, currentGameState, action):
 
-        successorGameState = currentGameState.generateSuccessor(self.index, action)
-        newPosition = successorGameState.getAgentPosition(self.index)
+        # successorGameState = currentGameState.generateSuccessor(self.index, action)
+        # newPosition = successorGameState.getAgentPosition(self.index)
         oldOppPacmanPositions = self.getOppPacman(currentGameState)
         evalFunc = self.defenseEvaluationFunction
         if len(oldOppPacmanPositions) < 2:
@@ -213,7 +208,7 @@ class HybridAgent(CaptureAgent):
 
         # Useful information you can extract.
         newPosition = successorGameState.getAgentPosition(self.index)
-        oldFood = self.getOppFood(currentGameState)
+        # oldFood = self.getOppFood(currentGameState)
         oldOppPacmanPositions = self.getOppPacman(currentGameState)
         # newScaredTimes = [ghostState.getScaredTimer() for ghostState in newGhostStates]
 
@@ -236,7 +231,7 @@ class HybridAgent(CaptureAgent):
         newGhostPositions = self.getOppGhost(successorGameState)
         oldOppPacmanPositions = self.getOppPacman(currentGameState)
         score = currentGameState.getScore() * 100  # weighted current score
-        closestDistToFood = float('-inf')
+        # closestDistToFood = float('-inf')
         if newPosition in oldOppPacmanPositions:
             return 10000
         if self.onOppositeSide(newPosition, successorGameState):
@@ -250,12 +245,13 @@ class HybridAgent(CaptureAgent):
         # calculate ghost score
         eat_ghost = 1  # coefficient to switch values if ghost are edible
         for i in range(len(newGhostPositions)):
-            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible, change weight to inverse reciprocol
+            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible
                 eat_ghost = -0.1
-            if distance.manhattan(newGhostPositions[i], newPosition) <= 1:  # if near ghost run away
+            dist = distance.manhattan(newGhostPositions[i], newPosition)
+            if dist <= 1:  # if near ghost run away
                 score -= 50 * eat_ghost
             else:  # subtract reciprocol ghost distance (b/c closer ghost = less points) * weight
-                score -= (1 / distance.manhattan(newGhostPositions[i], newPosition)) * 50 * eat_ghost
+                score -= (1 / dist) * 50 * eat_ghost
         return score
 
 
