@@ -7,21 +7,12 @@ from pacai.core.directions import Directions
 
 
 class DefenseAgent(CaptureAgent):
-    """
-    A Dummy agent to serve as an example of the necessary agent structure.
-    You should look at `pacai.core.baselineTeam` for more details about how to create an agent.
-    """
 
     def __init__(self, index, **kwargs):
         super().__init__(index)
 
     def registerInitialState(self, gameState):
-        """
-        This method handles the initial setup of the agent and populates useful fields,
-        such as the team the agent is on and the `pacai.core.distanceCalculator.Distancer`.
 
-        IMPORTANT: If this method runs for more than 15 seconds, your agent will time out.
-        """
 
         super().registerInitialState(gameState)
         self.isRed = gameState.isOnRedTeam(self.index)
@@ -94,14 +85,6 @@ class DefenseAgent(CaptureAgent):
 
 
     def evaluationFunction(self, currentGameState, action):
-        """
-        Design a better evaluation function here.
-
-        The evaluation function takes in the current `pacai.bin.pacman.PacmanGameState`
-        and an action, and returns a number, where higher numbers are better.
-        Make sure to understand the range of different values before you combine them
-        in your evaluation function.
-        """
 
         successorGameState = currentGameState.generateSuccessor(self.index, action)
 
@@ -225,13 +208,6 @@ class HybridAgent(CaptureAgent):
         return evalFunc(currentGameState, action)
 
     def defenseEvaluationFunction(self, currentGameState, action):
-        """
-        Design a better evaluation function here.
-        The evaluation function takes in the current `pacai.bin.pacman.PacmanGameState`
-        and an action, and returns a number, where higher numbers are better.
-        Make sure to understand the range of different values before you combine them
-        in your evaluation function.
-        """
 
         successorGameState = currentGameState.generateSuccessor(self.index, action)
 
@@ -250,13 +226,6 @@ class HybridAgent(CaptureAgent):
         return -1 * distance.maze(oldOppPacmanPositions[0], newPosition, successorGameState)
 
     def offenseEvaluationFunction(self, currentGameState, action):
-        """
-        Design a better evaluation function here.
-        The evaluation function takes in the current `pacai.bin.pacman.PacmanGameState`
-        and an action, and returns a number, where higher numbers are better.
-        Make sure to understand the range of different values before you combine them
-        in your evaluation function.
-        """
 
         successorGameState = currentGameState.generateSuccessor(self.index, action)
 
@@ -265,9 +234,11 @@ class HybridAgent(CaptureAgent):
         oldFood = self.getOppFood(currentGameState)
         newGhostStates = self.getOppGhostState(successorGameState)
         newGhostPositions = self.getOppGhost(successorGameState)
-
+        oldOppPacmanPositions = self.getOppPacman(currentGameState)
         score = currentGameState.getScore() * 100  # weighted current score
         closestDistToFood = float('-inf')
+        if newPosition in oldOppPacmanPositions:
+            return 10000
         if self.onOppositeSide(newPosition, successorGameState):
             score += 100
         for food in oldFood.asList():
@@ -290,13 +261,7 @@ class HybridAgent(CaptureAgent):
 
 def createTeam(firstIndex, secondIndex, isRed,
                first='pacai.student.myTeam.HybridAgent',
-               second='pacai.student.defenseAgent.DefenseAgent'):
-    """
-    This function should return a list of two agents that will form the capture team,
-    initialized using firstIndex and secondIndex as their agent indexed.
-    isRed is True if the red team is being created,
-    and will be False if the blue team is being created.
-    """
+               second='pacai.student.myTeam.DefenseAgent'):
 
     firstAgent = reflection.qualifiedImport(first)
     secondAgent = reflection.qualifiedImport(second)
