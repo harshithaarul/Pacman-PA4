@@ -104,12 +104,13 @@ class OffenseAgent(CaptureAgent):
         # calculate ghost score
         eat_ghost = 1  # coefficient to switch values if ghost are edible
         for i in range(len(newGhostPositions)):
-            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible, change weight to inverse reciprocol
+            dist = distance.manhattan(newGhostPositions[i], newPosition)
+            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible, weight=inverse reciprocol
                 eat_ghost = -0.1
-            if distance.manhattan(newGhostPositions[i], newPosition) <= 1:  # if near ghost run away
+            if dist <= 1:  # if near ghost run away
                 score -= 50 * eat_ghost
             else:  # subtract reciprocol ghost distance (b/c closer ghost = less points) * weight
-                score -= (1 / distance.manhattan(newGhostPositions[i], newPosition)) * 50 * eat_ghost
+                score -= (1 / dist) * 50 * eat_ghost
         return score
 
 
@@ -357,12 +358,13 @@ class HybridAgent(CaptureAgent):
         # calculate ghost score
         eat_ghost = 1  # coefficient to switch values if ghost are edible
         for i in range(len(newGhostPositions)):
-            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible, change weight to inverse reciprocol
+            dist = distance.manhattan(newGhostPositions[i], newPosition)
+            if newGhostStates[i].getScaredTimer() > 0:  # if ghosts edible, weight=inverse reciprocol
                 eat_ghost = -0.1
-            if distance.manhattan(newGhostPositions[i], newPosition) <= 1:  # if near ghost run away
+            if dist <= 1:  # if near ghost run away
                 score -= 50 * eat_ghost
             else:  # subtract reciprocol ghost distance (b/c closer ghost = less points) * weight
-                score -= (1 / distance.manhattan(newGhostPositions[i], newPosition)) * 50 * eat_ghost
+                score -= (1 / dist) * 50 * eat_ghost
         return score
 
 
