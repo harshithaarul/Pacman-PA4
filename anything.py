@@ -204,22 +204,9 @@ class DefenseAgent(CaptureAgent):
             return -1000
 
         if len(oldOppPacmanPositions) == 0:
-            otherside = self.getOppGhost(successorGameState)
-            pospac = 0
-            yax = 0
-            for pacman in otherside:
-                if pacman[0]>pospac:
-                    pospac = pacman[0]
-                    yax = pacman[1]
-
-            mid = self.midpoint[0]
-            
-            while currentGameState.getWalls()[mid][yax]:
-                mid +=1
-            position = (mid, yax)
             return -1 * distance.maze(self.midpoint, newPosition, successorGameState)
 
-        
+        return -1 * distance.maze(oldOppPacmanPositions[0], newPosition, successorGameState)
 
 
 class HybridAgent(CaptureAgent):
@@ -342,7 +329,21 @@ class HybridAgent(CaptureAgent):
             return -1000
 
         if len(oldOppPacmanPositions) == 0:
-            return -1 * distance.maze(self.midpoint, newPosition, successorGameState)
+            otherside = self.getOppGhost(successorGameState)
+            pospac = 0
+            yax = 0
+            for pacman in otherside:
+                if pacman[0]>pospac:
+                    pospac = pacman[0]
+                    yax = pacman[1]
+
+            mid = self.midpoint[0]
+            
+            while currentGameState.getWalls()[mid][yax]:
+                mid +=1
+            position = (mid, yax)
+            return -1 * distance.maze(position, newPosition, successorGameState)
+            
 
         return -1 * distance.maze(oldOppPacmanPositions[0], newPosition, successorGameState)
 
