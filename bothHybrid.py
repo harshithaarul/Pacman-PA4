@@ -129,10 +129,10 @@ class HybridAgent(CaptureAgent):
             return True
         for i in OppPositions:
             if self.isRed:
-                if self.mid_x_coord <= (i[0] - 10):
+                if self.mid_x_coord <= (i[0] - 20):
                     return True
             else:
-                if self.mid_x_coord >= (i[0] + 10):
+                if self.mid_x_coord >= (i[0] + 20):
                     return True
         return False
 
