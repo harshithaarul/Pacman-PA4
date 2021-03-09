@@ -125,7 +125,7 @@ class HybridAgent(CaptureAgent):
     def isOppClose(self, currentGameState):
         myPos = currentGameState.getAgentPosition(self.index)
         OppPositions = self.getOppGhost(currentGameState)
-        if(len(self.getOppPacman(currentGameState)) <= 1):
+        if(len(self.getOppPacman(currentGameState)) <= 2):
             return True
         for i in OppPositions:
             if self.isRed:
