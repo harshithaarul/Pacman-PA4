@@ -346,17 +346,17 @@ class OffenseAgent(CaptureAgent):
         if self.onOppositeSide(newPosition, successorGameState):
             score += 100
         for food in oldFood.asList():
-            dist = distance.manhattan(newPosition, food)
+            dist = distance.maze(newPosition, food, currentGameState)
             if dist == 0:  # check if the new position is food
                 score += 1000
             else:  # add reciprocol manhattan dist to food (b/c close food = more points) * weight
                 score += (1 / dist) * 100
-        walls = currentGameState.getWalls()
-        if(self.onOppositeSide(newPosition, currentGameState)):
-            for wall in walls.asList():
-                dist = distance.manhattan(newPosition, wall)
-                if dist <= 1:  # check if the new position is food
-                    score -= 100
+        # walls = currentGameState.getWalls()
+        # if(self.onOppositeSide(newPosition, currentGameState)):
+        #     for wall in walls.asList():
+        #         dist = distance.manhattan(newPosition, wall)
+        #         if dist <= 1:  # check if the new position is food
+        #             score -= 100
         # calculate ghost score
         eat_ghost = 1  # coefficient to switch values if ghost are edible
         for i in range(len(newGhostPositions)):
