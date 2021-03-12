@@ -12,8 +12,12 @@ class OffenseAgent(CaptureAgent):
         super().registerInitialState(gameState)
         self.isRed = gameState.isOnRedTeam(self.index)
         # Your initialization code goes here, if you need any.
+        self.posHistory = []
 
     def chooseAction(self, gameState):
+        self.posHistory.append(gameState.getAgentPosition(self.index))
+        if(len(self.posHistory) > 2):
+            self.posHistory.pop(0)
         # Collect legal moves.
         legalMoves = gameState.getLegalActions(self.index)
         if Directions.STOP in legalMoves:
@@ -108,6 +112,8 @@ class OffenseAgent(CaptureAgent):
                 score -= 50 * eat_ghost
             else:  # subtract reciprocol ghost distance * weight
                 score -= (1 / dist) * 50 * eat_ghost
+        if(len(self.posHistory) > 2 and newPosition == self.posHistory[len(self.posHistory) - 2]):
+            score -= 1000
         return score
 
 class HybridAgent(CaptureAgent):
